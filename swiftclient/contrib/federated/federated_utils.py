@@ -30,7 +30,7 @@ def selectTenantOrDomain(tenantsList, serverName=None):
         print "You have access to the following tenant(s) and domain(s)on "+serverName+":"
     for idx, tenant in enumerate(tenantsList):
         if tenant.get("project", None) is None and tenant.get("domain", None) is None:
-            print "\t{", idx, "} ", tenant["description"]
+            print "\t{", idx, "} ", tenant["name"]
         else:
             if tenant.get("domain", None) is not None:
                 print "\t{", idx, "} ", tenant["domain"]["description"]

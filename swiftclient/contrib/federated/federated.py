@@ -17,11 +17,14 @@ def federatedAuthentication(keystoneEndpoint, realm = None, tenantFn = None, v3 
     realms = getRealmList(keystoneEndpoint)
     if realm is None or {'name': realm} not in realms['realms']:
         realm = futils.selectRealm(realms['realms'])
+    # Connect to the federated keystone
     request = getIdPRequest(keystoneEndpoint, realm)
     # Load the correct protocol module according to the IdP type
     protocol = realm['type'].split('.')[1]
     processing_module = load_protocol_module(protocol)
+    # Authenticate against the realm's keystone
     response = processing_module.getIdPResponse(request['idpEndpoint'], request['idpRequest'], realm)
+    
     tenantData = getUnscopedToken(keystoneEndpoint, response, realm)
     tenant = futils.getTenantId(tenantData['tenants'], tenantFn)
     if tenant is None:
